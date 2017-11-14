@@ -1,0 +1,9 @@
+{
+  "name": "moapi",
+  "version": "0.1.0",
+  "description": "An interface for the Mopidy server",
+  "main": "index.js",
+  "repository": "https://github.com/raindeer44/moapi",
+  "author": "Jade Thornton <jade@jmthornton.net>",
+  "license": "ISC"
+}
