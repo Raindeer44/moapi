@@ -92,7 +92,14 @@ class Moapi extends EventEmitter {
     }
     this.emit('state::offline');
   }
-}
+
+  apiSpec() {
+    return this.sendMessage(new Map(['method', 'core.describe']))
+      .then(this.createApi)
+      .catch(this.handleWSError);
+  }
+
+} // Moapi
 
 class ConnectionError extends Error {
   constructor(message) {
