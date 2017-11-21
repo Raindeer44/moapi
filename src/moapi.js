@@ -8,7 +8,6 @@ class Moapi extends EventEmitter {
   settings: {[string]: any};
   pendingRequests: any;
   webSocket: any;
-  webSocketClient = websocket.Client;
 
   constructor(settings: {[string]: any}) {
     super();
@@ -58,13 +57,13 @@ class Moapi extends EventEmitter {
 
   connect(): void {
     if (this.webSocket) {
-      if (this.webSocket.readyState === this.webSocketClient.OPEN) {
+      if (this.webSocket.readyState === websocket.Client.OPEN) {
         return;
       } else {
         this.webSocket.close();
       }
     } else {
-      this.webSocket = new this.webSocketClient(this.settings.webSocketUrl);
+      this.webSocket = new websocket.Client(this.settings.webSocketUrl);
 
       this.webSocket.onclose = (close) => {
         this.emit('ws::close', close);
