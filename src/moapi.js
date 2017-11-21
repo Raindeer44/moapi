@@ -80,8 +80,29 @@ class Moapi extends EventEmitter {
     }
   }
 
-  get webSocketClient(): websocket.Client {
-    return websocket.Client;
+  sendMessage(message: Map<string, string>): Promise<> {
+    return new Promise((resolve, reject) => {
+      switch (this.webSocket.readyState) {
+        // reject message sending unless ws is connected
+        case websocket.Client.CONNECTING:
+          reject(new ConnectionError('WebSocket is still connecting'));
+          break;
+        case websocket.Client.CLOSING:
+          reject(new ConnectionError('WebSocket is closing'));
+          break;
+        case websocket.Client.CLOSED:
+          reject(new ConnectionError('WebSocket is closed'));
+          break;
+        default:
+          // ws is open and connected, message can be sent
+          const formedMessage = {
+            method: message.get('method'),
+            jsonrpc: '2.0',
+            id: this.nextRequestId(),
+          }
+          this.pendingRequests[formedMessage.id] = null; // TODO how do we pass the promise?
+      }
+    });
   }
 
   teardown(): void {
